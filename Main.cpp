@@ -8,8 +8,8 @@ public:
 
 int main(int argc, char* argv[])
 {
-	UserSetting* setting = MySetting<UserSetting>::getInstance("Global");
-	setting->setValue("name", "chencong");
+  	UserSetting* setting = MySetting<UserSetting>::getInstance("Global");
+	setting->setValue("name", "chencong1");
 	MySetting<UserSetting>::destroySettingManager();
 	return 0;
 }
