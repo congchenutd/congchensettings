@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QProcessEnvironment>
 #include <QHostInfo>
+#include <QApplication>
 
 // a framework supporting multi-user ini file
 template <class T>
@@ -47,9 +48,9 @@ T* MySetting<T>::getInstance(const QString& name)
 	{
 		fileName.append(QHostInfo::localHostName() + "_");
 		QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN32)
 		fileName.append(environment.value("USERNAME", "UnknownUser") + ".ini");
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
 		fileName.append(environment.value("USER", "UnknownUser") + ".ini");
 #else
 		fileName.append(".ini");
@@ -60,6 +61,8 @@ T* MySetting<T>::getInstance(const QString& name)
 	if(it != settingManager.end())
 		return it->second;
 
+    if(!QFileInfo(fileName).isAbsolute())
+        fileName = QApplication::applicationDirPath() + "/" + fileName;
 	T* setting = new T(fileName);
 	settingManager.insert(std::make_pair(fileName, setting));
 	return setting;
